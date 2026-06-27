@@ -1,0 +1,16 @@
+{
+  "name": "HK Relay",
+  "interface": "eth0",
+  "period": "2026-06",
+  "quota_gb": 250,
+  "quota_bytes": 268435456000,
+  "billing_mode": "bidirectional",
+  "month_rx_bytes": 0,
+  "month_tx_bytes": 0,
+  "month_total_bytes": 0,
+  "today_rx_bytes": 0,
+  "today_tx_bytes": 0,
+  "today_total_bytes": 0,
+  "updated_at": "2026-06-27T00:00:00Z",
+  "source": "vnstat"
+}

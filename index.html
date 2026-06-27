@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>香港中转流量监控</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">HK Relay</p>
+          <h1>香港中转流量监控</h1>
+          <p id="updated" class="muted">正在读取数据...</p>
+        </div>
+        <div id="status" class="status">Loading</div>
+      </section>
+
+      <section class="meter-card">
+        <div class="meter-header">
+          <span>本月已用</span>
+          <strong id="month-percent">--%</strong>
+        </div>
+        <div class="meter">
+          <div id="meter-fill" class="meter-fill"></div>
+        </div>
+        <div class="meter-footer">
+          <span id="month-used">-- GB</span>
+          <span id="month-quota">/ 250 GB</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="tile">
+          <span>剩余流量</span>
+          <strong id="remaining">-- GB</strong>
+        </article>
+        <article class="tile">
+          <span>今日已用</span>
+          <strong id="today-total">-- GB</strong>
+        </article>
+        <article class="tile">
+          <span>本月下载</span>
+          <strong id="month-rx">-- GB</strong>
+        </article>
+        <article class="tile">
+          <span>本月上传</span>
+          <strong id="month-tx">-- GB</strong>
+        </article>
+      </section>
+
+      <section class="details">
+        <dl>
+          <div>
+            <dt>统计网卡</dt>
+            <dd id="iface">--</dd>
+          </div>
+          <div>
+            <dt>计费口径</dt>
+            <dd id="billing">双向流量</dd>
+          </div>
+          <div>
+            <dt>统计周期</dt>
+            <dd id="period">--</dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
