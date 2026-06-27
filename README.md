@@ -1,10 +1,11 @@
 # 香港中转流量监控
 
-这个小项目用来监控香港中转 VPS 的月流量。页面适合放在 GitHub Pages 上，香港 VPS 使用 `vnStat` 定时更新 `data/traffic.json` 并推送到 GitHub。
+这个小项目用来监控香港中转 VPS 的账单周期流量。页面适合放在 GitHub Pages 上，香港 VPS 使用 `vnStat` 定时更新 `data/traffic.json` 并推送到 GitHub。
 
 默认口径：
 
 - 月额度：250 GB
+- 重置日期：每月 15 号
 - 计费方式：双向流量，下载 + 上传
 - 数据来源：`vnstat`
 
@@ -50,15 +51,16 @@ ip route get 1.1.1.1
 
 ## 3. 在香港 VPS 克隆仓库
 
-推荐用 SSH key 或 GitHub token，让 VPS 可以推送仓库。
+推荐用 GitHub token，让 VPS 可以推送仓库。
 
 示例：
 
 ```bash
-git clone git@github.com:你的用户名/hk-traffic-monitor.git /opt/hk-traffic-monitor
+git clone https://github.com/你的用户名/hk-traffic-monitor.git /opt/hk-traffic-monitor
 cd /opt/hk-traffic-monitor
 git config user.name "hk-traffic-bot"
 git config user.email "hk-traffic-bot@example.com"
+git config --global credential.helper store
 ```
 
 把脚本设为可执行：
@@ -70,7 +72,7 @@ chmod +x /opt/hk-traffic-monitor/scripts/update-traffic.sh
 先手动跑一次：
 
 ```bash
-INTERFACE=eth0 QUOTA_GB=250 /opt/hk-traffic-monitor/scripts/update-traffic.sh
+INTERFACE=eth0 QUOTA_GB=250 BILLING_DAY=15 /opt/hk-traffic-monitor/scripts/update-traffic.sh
 ```
 
 如果你的网卡不是 `eth0`，把上面的 `eth0` 换成实际网卡名。
@@ -86,7 +88,7 @@ crontab -e
 加入：
 
 ```cron
-*/10 * * * * INTERFACE=eth0 QUOTA_GB=250 /opt/hk-traffic-monitor/scripts/update-traffic.sh >/tmp/hk-traffic-monitor.log 2>&1
+*/10 * * * * INTERFACE=eth0 QUOTA_GB=250 BILLING_DAY=15 /opt/hk-traffic-monitor/scripts/update-traffic.sh >/tmp/hk-traffic-monitor.log 2>&1
 ```
 
 这样每 10 分钟更新一次页面数据。
@@ -98,6 +100,7 @@ crontab -e
 ```bash
 vnstat
 cat /opt/hk-traffic-monitor/data/traffic.json
+cat /tmp/hk-traffic-monitor.log
 ```
 
 如果 GitHub Pages 页面更新慢，等 1-3 分钟再刷新。

@@ -35,7 +35,7 @@ function setStatus(percent, updatedAt) {
 
 function render(data) {
   const quota = data.quota_bytes || data.quota_gb * GB;
-  const monthTotal = data.month_total_bytes || 0;
+  const monthTotal = data.cycle_total_bytes ?? data.month_total_bytes ?? 0;
   const remaining = Math.max(quota - monthTotal, 0);
   const percent = quota > 0 ? (monthTotal / quota) * 100 : 0;
   const clamped = Math.min(percent, 100);
@@ -45,8 +45,8 @@ function render(data) {
   $("month-quota").textContent = `/ ${gb(quota)} GB`;
   $("remaining").textContent = `${gb(remaining)} GB`;
   $("today-total").textContent = `${gb(data.today_total_bytes || 0)} GB`;
-  $("month-rx").textContent = `${gb(data.month_rx_bytes || 0)} GB`;
-  $("month-tx").textContent = `${gb(data.month_tx_bytes || 0)} GB`;
+  $("month-rx").textContent = `${gb(data.cycle_rx_bytes ?? data.month_rx_bytes ?? 0)} GB`;
+  $("month-tx").textContent = `${gb(data.cycle_tx_bytes ?? data.month_tx_bytes ?? 0)} GB`;
   $("iface").textContent = data.interface || "--";
   $("period").textContent = data.period || "--";
   $("billing").textContent =
