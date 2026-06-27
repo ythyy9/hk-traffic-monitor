@@ -5,11 +5,14 @@ REPO_DIR="${REPO_DIR:-/opt/hk-traffic-monitor}"
 INTERFACE="${INTERFACE:-eth0}"
 QUOTA_GB="${QUOTA_GB:-250}"
 DATA_FILE="$REPO_DIR/data/traffic.json"
+TMP_JSON="$(mktemp)"
+trap 'rm -f "$TMP_JSON"' EXIT
 
 cd "$REPO_DIR"
 mkdir -p "$(dirname "$DATA_FILE")"
 
-vnstat --json -i "$INTERFACE" | python3 - "$INTERFACE" "$QUOTA_GB" "$DATA_FILE" <<'PY'
+vnstat --json -i "$INTERFACE" > "$TMP_JSON"
+python3 - "$INTERFACE" "$QUOTA_GB" "$DATA_FILE" "$TMP_JSON" <<'PY'
 import json
 import sys
 from datetime import datetime, timezone
@@ -17,8 +20,10 @@ from datetime import datetime, timezone
 iface = sys.argv[1]
 quota_gb = float(sys.argv[2])
 data_file = sys.argv[3]
-raw = sys.stdin.read()
-payload = json.loads(raw)
+vnstat_file = sys.argv[4]
+
+with open(vnstat_file, "r", encoding="utf-8") as fh:
+    payload = json.load(fh)
 
 interfaces = payload.get("interfaces", [])
 selected = None
